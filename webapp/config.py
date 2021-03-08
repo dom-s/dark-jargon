@@ -1,0 +1,10 @@
+DEBUG = True
+CACHE_TYPE = "simple"
+CACHE_DEFAULT_TIMEOUT = 300
+DARK_TERM_DB = "webapp/databases/dark-term.db"
+LOG_DB = "webapp/databases/log.db"
+DARK_TERM_TIMESTAMPS = "webapp/static/data/dark-terms_timestamps.pkl"
+DARK_TERM_BERT_MAPPING = "webapp/static/data/counters_bert-base-uncased.pkl"
+DARK_TERM_KL_FOLDER = "webapp/static/data/kl/"
+DARK_FORUM_NAMES = ["total", "darkode", "hackforums", "nulled", "silkroad"]
+NUM_CLEAN_TERMS = 5

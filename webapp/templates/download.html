@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="container-lg">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+            <div class="container-fluid">
+                <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="../darkjargon//">
+                    <img src="{{url_for('static', filename='fig/rat_32_32.png')}}"> &nbsp; DarkJargon.net
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                      <a class="nav-link" href="../darkjargon//">Home</a>
+                    </li>
+                     <li class="nav-item">
+					    <a class="nav-link" href="{{ url_for('collab') }}">Collaborate</a>
+				    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Download</a>
+                    </li>
+                    <li class="nav-item">
+					    <a class="nav-link" href="{{ url_for('about') }}">About</a>
+				    </li>
+                  </ul>
+                </div>
+            </div>
+        </nav>
+    <br><br><br><br>
+    <div class="row">
+        <div class="alert alert-primary" role="alert">
+            <h4 class="alert-heading">Downloads</h4>
+            This page allows you to download different datasets used by DarkJargon.net. Verified and user-created
+            dark term datasets are created as up-to-date database dumps in CSV format.
+            <br>
+            Please consider citing our paper if you make use of our datasets. Thank you!
+        </div>
+    </div>
+    <div class="row">
+        <main role="main" class="col-md-11 ml-sm-auto">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                  <tr>
+                      <th scope="col"> Dataset </th>
+                      <th scope="col"> Description </th>
+                      <th scope="col">  </th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Verified Dark Terms</td>
+                        <td>A list of expert-verified dark terms as found on the home page.</td>
+                        <td>
+                            <a href="{{ url_for('download_file', dataset='verified') }}" role="button" id="downloadVerified" class="btn btn-primary">
+                                Download
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>User Dark Terms</td>
+                        <td>Dark terms that where contributed by users and are unverified.</td>
+                        <td>
+                            <a href="{{ url_for('download_file', dataset='collab') }}" role="button" id="downloadCollab" class="btn btn-primary">
+                                Download
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Timestamps</td>
+                        <td>Timestamps of dark terms indexed by forum.</td>
+                        <td>
+                            <a href="{{ url_for('download_file', dataset='timestamps') }}" role="button" id="downloadTimestamps" class="btn btn-primary">
+                                Download
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>KL-Divergence Clean Term Mappings</td>
+                        <td>Clean term mappings of dark terms using the KL-Divergence method over different forums.</td>
+                        <td>
+                            <a href="{{ url_for('download_file', dataset='kl') }}" role="button" id="downloadKL" class="btn btn-primary">
+                                Download
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Masked Language Modeling (BERT) Clean Term Mappings</td>
+                        <td>Clean term mappings of dark terms using the Masked Language Modeling (BERT) method indexed by forum.</td>
+                        <td>
+                            <a href="{{ url_for('download_file', dataset='mlm-bert') }}" role="button" id="downloadBert" class="btn btn-primary">
+                                Download
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+
+    </div>
+</div>
+{% endblock %}

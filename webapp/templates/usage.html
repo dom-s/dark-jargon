@@ -1,0 +1,378 @@
+{% extends "layout.html" %}
+{% block body %}
+	<script src="{{url_for('static', filename='js/moment.min.js') }}"></script>
+	<script src="{{url_for('static', filename='js/Chart.min.js') }}"></script>
+	<script src="{{url_for('static', filename='js/utils_usage.js') }}"></script>
+	<style>
+		canvas {
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+	</style>
+<style type="text/css">/* Chart.js */
+@keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}.chartjs-render-monitor{animation:chartjs-render-animation 1ms}.chartjs-size-monitor,.chartjs-size-monitor-expand,.chartjs-size-monitor-shrink{position:absolute;direction:ltr;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1}.chartjs-size-monitor-expand>div{position:absolute;width:1000000px;height:1000000px;left:0;top:0}.chartjs-size-monitor-shrink>div{position:absolute;width:200%;height:200%;left:0;top:0}</style></head>
+<body data-new-gr-c-s-check-loaded="14.984.0" data-gr-ext-installed="">
+<main role="main" class="col-md-11 ml-sm-auto">
+<div class="container-lg">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+		<div class="container-fluid">
+			<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="../../darkjargon//">
+				<img src="{{url_for('static', filename='fig/rat_32_32.png')}}"> &nbsp; DarkJargon.net
+			</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			  <span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				<li class="nav-item">
+				  <a class="nav-link" href="../../darkjargon//">Home</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('collab') }}">Collaborate</a>
+				</li>
+                <li class="nav-item">
+					<a class="nav-link" href="{{ url_for('download') }}">Download</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('about') }}">About</a>
+				</li>
+			  </ul>
+			</div>
+		</div>
+	</nav>
+	<br>
+		<h1>Dark Term: "{{ term }}"
+			<button type="button"
+					class="btn btn-outline-primary btn-sm"
+					data-bs-toggle="popover"
+					title="Currently Selected Dark Term"
+					data-bs-content="'{{ term }}' is your currently selected dark term.">?</button>
+		</h1>
+		<br>
+		<h3>Usage Over Time
+			<button type="button"
+					class="btn btn-outline-primary btn-sm"
+					data-bs-toggle="popover"
+					title="Dark Term Usage over Time"
+					data-bs-content="This chart allows you to view the
+						usage of the currently selected dark term over time. You
+						can monitor usages for different forums using the selector below.">?</button>
+		</h3>
+	{% if timestamp_term %}
+	Forum:
+	<select id="forum">
+		<option value="total" selected>Total</option>
+		<option value="hackforums">Hackforums</option>
+		<option value="darkode">Darkode</option>
+		<option value="silkroad">Silkroad</option>
+	</select>
+	<button id="update">update</button>
+		<canvas id="chart1" width="1000" height="300" class="chartjs-render-monitor" style="display: block;"></canvas>
+	{% else %}
+	<div class="alert alert-warning" role="alert">
+			<h5 class="alert-heading">No usage data found.</h5>
+            No underground forum usage data was found for the selected dark term.
+        </div>
+	{% endif %}
+
+	<br>
+	<br>
+
+		<br>
+		<h3>Clean Term Mapping
+			<button type="button"
+					class="btn btn-outline-primary btn-sm"
+					data-bs-toggle="popover"
+					title="Clean Term Mappings of Selected Dark Term"
+					data-bs-content="The charts below show the most likely clean terms for the
+						currently selected dark term. Terms are ranked according to the smallest
+						log probability (i.e., the most likely). You can change the mapping method
+						using the selector below.">?</button>
+		</h3>
+	{% if kl_term or bert_term %}
+		Mapping Method:
+		<select id="mapping">
+			<option value="kl" selected>KL-Divergence</option>
+			<option value="bert">Masked Language Modeling (BERT)</option>
+		</select>
+		<button id="update-mapping">update</button>
+		<div id="div-total">
+			<canvas id="chart2" width="1000" height="300" class="chartjs-render-monitor" style="..."></canvas>
+			<br>
+		</div>
+
+		<div id="div-darkode">
+			<canvas id="chart3" width="1000" height="300" class="chartjs-render-monitor" style="..."></canvas>
+			<br>
+		</div>
+
+		<div id="div-hackforums">
+			<canvas id="chart4" width="1000" height="300" class="chartjs-render-monitor" style="..."></canvas>
+			<br>
+		</div>
+
+		<div id="div-nulled">
+			<canvas id="chart5" width="1000" height="300" class="chartjs-render-monitor" style="..."></canvas>
+			<br>
+		</div>
+
+		<div id="div-silkroad">
+			<canvas id="chart6" width="1000" height="300" class="chartjs-render-monitor" style="..."></canvas>
+			<br>
+		</div>
+	{% else %}
+		<div class="alert alert-warning" role="alert">
+			<h5 class="alert-heading">No clean term mappings found.</h5>
+            No clean term mappings were found for the selected dark term.
+        </div>
+	{% endif %}
+</div>
+	<script>
+		var timestamp_data = {{ timestamp_term|tojson }};
+
+		function parseUsageData(usageData){
+			var data = [];
+			for(i=0; i<usageData.length; i++){
+				data.push(
+						{
+							t: moment(usageData[i][0]),
+							y: usageData[i][1]
+						}
+				);
+			}
+			return data;
+		}
+
+		var color = Chart.helpers.color;
+
+		if (Object.keys(timestamp_data).length > 0) {
+			var ctx = document.getElementById('chart1').getContext('2d');
+			ctx.canvas.width = 1000;
+			ctx.canvas.height = 300;
+
+			var cfg = {
+				data: {
+					datasets: [{
+						label: 'total',
+						backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+						borderColor: window.chartColors.red,
+						data: parseUsageData(timestamp_data['total']),
+						type: 'line',
+						pointRadius: 0,
+						fill: false,
+						lineTension: 0,
+						borderWidth: 2
+					}]
+				},
+				options: {
+					animation: {
+						duration: 0
+					},
+					scales: {
+						xAxes: [{
+							type: 'time',
+							distribution: 'series',
+							offset: true,
+							ticks: {
+								major: {
+									enabled: true,
+									fontStyle: 'bold'
+								},
+								source: 'data',
+								autoSkip: true,
+								autoSkipPadding: 75,
+								maxRotation: 0,
+								sampleSize: 100
+							},
+							afterBuildTicks: function (scale, ticks) {
+								var majorUnit = scale._majorUnit;
+								var firstTick = ticks[0];
+								var i, ilen, val, tick, currMajor, lastMajor;
+
+								val = moment(ticks[0].value);
+								if ((majorUnit === 'minute' && val.second() === 0)
+										|| (majorUnit === 'hour' && val.minute() === 0)
+										|| (majorUnit === 'day' && val.hour() === 9)
+										|| (majorUnit === 'month' && val.date() <= 3 && val.isoWeekday() === 1)
+										|| (majorUnit === 'year' && val.month() === 0)) {
+									firstTick.major = true;
+								} else {
+									firstTick.major = false;
+								}
+								lastMajor = val.get(majorUnit);
+
+								for (i = 1, ilen = ticks.length; i < ilen; i++) {
+									tick = ticks[i];
+									val = moment(tick.value);
+									currMajor = val.get(majorUnit);
+									tick.major = currMajor !== lastMajor;
+									lastMajor = currMajor;
+								}
+								return ticks;
+							}
+						}],
+						yAxes: [{
+							gridLines: {
+								drawBorder: false
+							},
+							scaleLabel: {
+								display: true,
+								labelString: 'occurrences'
+							},
+							ticks: {
+								min: 0
+							}
+						}]
+					},
+					tooltips: {
+						intersect: false,
+						mode: 'index',
+						callbacks: {
+							label: function (tooltipItem, myData) {
+								var label = myData.datasets[tooltipItem.datasetIndex].label || '';
+								if (label) {
+									label += ': ';
+								}
+								label += parseFloat(tooltipItem.value).toFixed(2);
+								return label;
+							}
+						}
+					}
+				}
+			};
+
+			var chart = new Chart(ctx, cfg);
+
+			document.getElementById('update').addEventListener('click', function () {
+				var dataset = chart.config.data.datasets[0];
+				var forum = document.getElementById('forum').value;
+				if (forum in timestamp_data) {
+					dataset.label = forum;
+					dataset.data = parseUsageData(timestamp_data[forum]);
+					chart.update();
+				}
+			});
+
+		}
+
+		var kl_data = {{ kl_term|tojson }};
+		var bert_data = {{ bert_term|tojson }};
+
+		function getKlDataForTerm(klData){
+			var labels = [];
+			var probs = [];
+
+			for(i=0; i<klData.length; i++){
+				labels.push(klData[i][0]);
+				probs.push(klData[i][1]);
+			}
+
+			return [labels, probs];
+		}
+
+		// console.log(kl_data)
+		// console.log(bert_data)
+
+		function buildChart(forumName, context, chartColor, data_dict){
+			var dataForForum = getKlDataForTerm(data_dict[forumName])
+
+			var barChartData = {
+				labels: dataForForum[0],
+				datasets: [{
+					label: 'log probability',
+					backgroundColor: color(chartColor).alpha(0.5).rgbString(),
+					borderColor: chartColor,
+					borderWidth: 1,
+					data: dataForForum[1]
+				}]};
+
+			context.canvas.width = 1000;
+			context.canvas.height = 300;
+
+			return new Chart(context, {
+				type: 'bar',
+				data: barChartData,
+				options: {
+					responsive: true,
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: forumName
+					}
+				}
+			});
+		}
+
+		function updateChart(ctx, forumName, data_dict, chartColor){
+			var dataForForum = getKlDataForTerm(data_dict[forumName])
+			chart = ctx.data('chart');
+			var barChartData = {
+				labels: dataForForum[0],
+				datasets: [{
+					label: 'log probability',
+					backgroundColor: color(chartColor).alpha(0.5).rgbString(),
+					borderColor: chartColor,
+					borderWidth: 1,
+					data: dataForForum[1]
+				}]};
+			chart.data = barChartData;
+			chart.update();
+		}
+
+		function display(obj_id, visible) {
+			var obj = document.getElementById(obj_id);
+			if (visible){
+				obj.style.display = "block";
+			} else {
+				obj.style.display = "none";
+			}
+		}
+
+		function mappingHelper(forumName, divName, contextName, data_dict, update, color){
+			if (forumName in data_dict){
+				display(divName, true);
+				if (update && $('#' + contextName).data('chart') != null){
+					// console.log('update')
+					var ctx = $('#' + contextName)
+					updateChart(ctx, forumName, data_dict, color);
+				} else {
+					var ctx = document.getElementById(contextName).getContext('2d');
+					var chart = buildChart(forumName, ctx, color, data_dict);
+					ctx = $('#' + contextName)
+					ctx.data('chart', chart);
+				}
+			} else {
+				display(divName, false);
+			}
+		}
+
+		function buildMappingCharts(data_dict, update) {
+			mappingHelper('total', 'div-total', 'chart2', data_dict, update, window.chartColors.darkgray);
+			mappingHelper('darkode', 'div-darkode', 'chart3', data_dict, update, window.chartColors.blue);
+			mappingHelper('hackforums', 'div-hackforums', 'chart4', data_dict, update, window.chartColors.red);
+			mappingHelper('nulled', 'div-nulled', 'chart5', data_dict, update, window.chartColors.green);
+			mappingHelper('silkroad', 'div-silkroad', 'chart6', data_dict, update, window.chartColors.orange);
+		}
+
+		buildMappingCharts(kl_data, false)
+
+		document.getElementById('update-mapping').addEventListener('click', function() {
+			var method = document.getElementById('mapping').value;
+			if (method === 'kl'){
+				buildMappingCharts(kl_data, true);
+			} else {
+				buildMappingCharts(bert_data, true);
+			}
+		});
+
+		var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+		var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+		  return new bootstrap.Popover(popoverTriggerEl)
+		})
+	</script>
+</main>
+</body>
+{% endblock %}

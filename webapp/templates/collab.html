@@ -1,0 +1,209 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="container-lg">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+		<div class="container-fluid">
+			<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
+				<img src="{{url_for('static', filename='fig/rat_32_32.png')}}"> &nbsp; DarkJargon.net
+			</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			  <span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                      <a class="nav-link" href="../darkjargon//">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Collaborate</a>
+                    </li>
+                    <li class="nav-item">
+					    <a class="nav-link" href="{{ url_for('download') }}">Download</a>
+				    </li>
+                    <li class="nav-item">
+					    <a class="nav-link" href="{{ url_for('about') }}">About</a>
+				    </li>
+                  </ul>
+                </div>
+		</div>
+	</nav>
+        <main role="main" class="col-md-11  ml-sm-auto">
+            <!-- Table -->
+            <br>
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                  <tr>
+                    {% for value in header %}
+                      <th scope="col"> {{ value }} </th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in body %}
+                    <tr>
+                      <td>
+                        <a href="{{ url_for('usage', term=row[1]) }}"> {{row[1]}} </a>
+                      </td>
+                      <td>
+                          {{ row[2] }}
+                      </td>
+                      <td>
+                        <a href="{{row[3]}}" target="_blank"> {{row[3]}}</a>
+                      </td>
+                      <td>
+                        {{ row[4] }}
+                      </td>
+                      <td>
+                          <button type="button" class="btn btn-outline-primary" onclick="thumbs_up_click({{ row[0] }});">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.964.22.817.533 2.512.062 4.51a9.84 9.84 0 0 1 .443-.05c.713-.065 1.669-.072 2.516.21.518.173.994.68 1.2 1.273.184.532.16 1.162-.234 1.733.058.119.103.242.138.363.077.27.113.567.113.856 0 .289-.036.586-.113.856-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.162 3.162 0 0 1-.488.9c.054.153.076.313.076.465 0 .306-.089.626-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.826 4.826 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.616.849-.231 1.574-.786 2.132-1.41.56-.626.914-1.279 1.039-1.638.199-.575.356-1.54.428-2.59z"></path>
+                            </svg>
+                            {{ row[5] }}
+                          </button>
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-outline-danger" onclick="thumbs_down_click({{ row[0] }});">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down-fill" viewBox="0 0 16 16">
+                                <path d="M6.956 14.534c.065.936.952 1.659 1.908 1.42l.261-.065a1.378 1.378 0 0 0 1.012-.965c.22-.816.533-2.512.062-4.51.136.02.285.037.443.051.713.065 1.669.071 2.516-.211.518-.173.994-.68 1.2-1.272a1.896 1.896 0 0 0-.234-1.734c.058-.118.103-.242.138-.362.077-.27.113-.568.113-.856 0-.29-.036-.586-.113-.857a2.094 2.094 0 0 0-.16-.403c.169-.387.107-.82-.003-1.149a3.162 3.162 0 0 0-.488-.9c.054-.153.076-.313.076-.465a1.86 1.86 0 0 0-.253-.912C13.1.757 12.437.28 11.5.28H8c-.605 0-1.07.08-1.466.217a4.823 4.823 0 0 0-.97.485l-.048.029c-.504.308-.999.61-2.068.723C2.682 1.815 2 2.434 2 3.279v4c0 .851.685 1.433 1.357 1.616.849.232 1.574.787 2.132 1.41.56.626.914 1.28 1.039 1.638.199.575.356 1.54.428 2.591z"></path>
+                            </svg>
+                            {{ row[6] }}
+                        </button>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+        </main>
+    <div class="row">
+      <div class="col-sm-6">
+        <button type="button" id="addButton"
+                class="btn btn-primary"
+                onclick="addClick();">
+          Add Dark Term
+        </button>
+      </div>
+    </div>
+    <form id="formDarkTerm">
+    <div class="form-row">
+      <div class="col-sm-6">
+          <br>
+        <div class="card" style="width: 25rem;" id="addPanel">
+            <div class="card-body">
+                <h5 class="card-title">Dark Term Information</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Please provide some more information about the dark term.</h6>
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="darkTermInput" required>
+                  <label for="darkTermInput">Dark Term</label>
+                </div>
+                <div class="form-floating">
+                  <textarea class="form-control" id="darkTermDefinition" style="height: 100px" required></textarea>
+                  <label for="darkTermDefinition">Dark Term Definition</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="url" class="form-control" id="darkTermDefinitionSource" required>
+                  <label for="darkTermDefinitionSource">Definition Source</label>
+                </div>
+
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="darkTermUserName">
+                  <label for="darkTermUserName">Your Name (optional)</label>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <br>
+                        <button type="submit" id="updateButton"
+                                class="btn btn-primary">
+                          Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function () {
+      document.getElementById("addPanel").style.display = "none";
+    });
+
+    function toggle_visible(obj_id) {
+			var obj = document.getElementById(obj_id);
+			if (obj.style.display == "block"){
+			    obj.style.display = "none";
+			} else {
+			    obj.style.display = "block";
+			}
+		}
+
+    // Handle click event on Add button
+    function addClick() {
+        toggle_visible("addPanel");
+    }
+
+    function onSubmit() {
+        const url = '/content/collab'
+        const data={
+            dark_term: document.getElementById("darkTermInput").value,
+            definition: document.getElementById("darkTermDefinition").value,
+            definition_source: document.getElementById("darkTermDefinitionSource").value,
+            user_name: document.getElementById("darkTermUserName").value
+        };
+        $.post(url, data, function (data, status){
+           console.log(`data: ${data}, status: ${status}`)
+        });
+        location.reload();
+    }
+
+    const form = document.getElementById("formDarkTerm");
+    form.addEventListener('submit', onSubmit);
+
+     (function() {
+          'use strict';
+          window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+              form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+              }, false);
+            });
+          }, false);
+        })();
+
+     function thumbs_up_click(dark_term_id) {
+         const url = '/content/thumbs_up/' + dark_term_id;
+         var xhr = new XMLHttpRequest();
+         xhr.onreadystatechange = function (e) {
+             if (xhr.readyState === 4) {
+                 if (xhr.status === 200) {
+                     location.reload();
+                 }
+             }
+         }
+         xhr.open("POST", url, true);
+         xhr.send();
+     }
+
+     function thumbs_down_click(dark_term_id){
+         const url = '/content/thumbs_down/' + dark_term_id;
+         var xhr = new XMLHttpRequest();
+         xhr.onreadystatechange = function (e) {
+             if (xhr.readyState === 4) {
+                 if (xhr.status === 200) {
+                     location.reload();
+                 }
+             }
+         }
+         xhr.open("POST", url, true);
+         xhr.send();
+     }
+</script>
+
+{% endblock %}

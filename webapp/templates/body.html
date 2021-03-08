@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="container-lg">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+		<div class="container-fluid">
+			<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
+				<img src="{{url_for('static', filename='fig/rat_32_32.png')}}"> &nbsp; DarkJargon.net
+			</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			  <span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				<li class="nav-item">
+				  <a class="nav-link active" aria-current="page" href="#">Home</a>
+				</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('collab') }}">Collaborate</a>
+                </li>
+                <li class="nav-item">
+				    <a class="nav-link" href="{{ url_for('download') }}">Download</a>
+                </li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('about') }}">About</a>
+				</li>
+			  </ul>
+			</div>
+		</div>
+	</nav>
+        <main role="main" class="col-md-11 ml-sm-auto">
+            <!-- Table -->
+            <br>
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                  <tr>
+                    {% for value in header %}
+                      <th scope="col"> {{ value }} </th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in body %}
+                    <tr>
+                      <td>
+                        <a href="{{ url_for('usage', term=row[0]) }}"> {{row[0]}} </a>
+                      </td>
+                      {% for col in row[1:-1] %}
+                        <td> {{ col }}</td>
+                      {% endfor %}
+                      <td>
+                        <a href="{{row[-1]}}" target="_blank"> {{row[-1]}}</a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+        </main>
+</div>
+{% endblock %}
