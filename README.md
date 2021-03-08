@@ -32,10 +32,10 @@ If you use our work in your research please cite:
 ```
 
 
-## Licence
+## License
 
-By using this source code you agree to the licence in described in [https://github.com/dom-s/dark-jargon/blob/main/LICENSE][LICENCE].
+By using this source code you agree to the license in described in [https://github.com/dom-s/dark-jargon/blob/main/LICENSE][LICENSE].
 
-[LICENCE]: https://github.com/dom-s/dark-jargon/blob/main/LICENSE
+[LICENSE]: https://github.com/dom-s/dark-jargon/blob/main/LICENSE
 
 [Towards Dark Jargon Interpretation in Underground Forums]: https://arxiv.org/abs/2011.03011
