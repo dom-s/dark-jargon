@@ -34,7 +34,7 @@ If you use our work in your research please cite:
 
 ## License
 
-By using this source code you agree to the license in described in [https://github.com/dom-s/dark-jargon/blob/main/LICENSE][LICENSE].
+By using this source code you agree to the license described in [https://github.com/dom-s/dark-jargon/blob/main/LICENSE][LICENSE].
 
 [LICENSE]: https://github.com/dom-s/dark-jargon/blob/main/LICENSE
 
