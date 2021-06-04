@@ -25,3 +25,15 @@ export FLASK_DEBUG=true
 ## Launch to production:
 https://flask.palletsprojects.com/en/1.1.x/deploying/mod_wsgi/
 
+## Research Usage
+
+If you use our work in your research please cite:
+
+```
+@inproceedings{seyler2021darkjargonnet,
+  title={DarkJargon.net: A Platform for Understanding Underground Conversation with Latent Meaning},
+  author={Seyler, Dominic and Liu, Wei and Zhang, Yunan and Wang, XiaoFeng and Zhai, ChengXiang},
+  booktitle={International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  year={2021}
+}
+```

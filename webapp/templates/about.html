@@ -30,6 +30,39 @@
         </nav>
     <br><br><br><br>
         <p class="text-start">
+        <h1>System Overview</h1>
+    <br>
+            <h3>Dark Term Lookup</h3>
+    A common scenario is when a person observes some conversation in an underground forum and does not know the meaning of certain dark terms. For this scenario, the system provides a <a href="../darkjargon//">dictionary</a> of dark terms and their definitions, which were evaluated by a cybersecurity expert. The system also lists the URL of where the definition was found, which can be inspected by the user in case more info than the definition is required. In order to explore more details about the meaning and usage of a certain dark term, the user can click on the dark term itself, which guides her to the exploration interface.
+
+            <h3>Exploration Interface</h3>
+    The exploration interface has two major components: (1) The user can retrieve detailed information about the usage of the selected dark term over time and (2) browse different clean term mapping methods, in order to explore the meaning of a dark term.
+
+            <h3>Collaboration Interface</h3>
+    DarkJargon.net allows for the collective exploration and collection of dark terms. The system provides a <a href="{{ url_for('collab') }}">collaboration interface</a>, where users can browse dark terms identified by the community, give feedback and contribute novel dark terms.
+
+            <h3>Download</h3>
+    All datasets leveraged by DarkJargon.net are available for <a href="{{ url_for('download') }}">download</a>.
+        </p>
+    <br><br>
+        <p class="text-start">
+            <h1>FAQ</h1>
+    <br>
+            <h3>What is DarkJargon.net?</h3>
+    To cater to the understanding of underground conversation, DarkJargon.net caters to the needs of researchers, law enforcement agents and ``white-hat'' hackers to enable them to make sense of underground conversation.
+
+            <h3>What is dark jargon?</h3>
+    When participants in underground forums (e.g., <a href="https://en.wikipedia.org/wiki/Dark0de">Dark0de</a>) converse, they often obfuscate their true intentions by using dark jargon. These are terms that may look innocent to an outsider that is not a regular participant in underground activity, but the true meaning of these terms is hidden and sometimes sinister. For example, the dark term <strong>rat</strong> is often used as an abbreviation of "<strong>R</strong>emote <strong>A</strong>ccess <strong>T</strong>rojan" or <strong>popcorn</strong> is used to refer to a type of marijuana (i.e., popcorn nugs). For researchers and law enforcement alike, it is essential to have a good understanding of these latent meanings in order to gain valuable insights into underground activity.
+
+            <h3>Where can I read more about some of the algorithms employed in DarkJargon.net?</h3>
+    Please have a look at our paper: Seyler et al. ECIR 2021, <a href="https://arxiv.org/abs/2011.03011">"Towards Dark Jargon Interpretation in Underground Forums"</a>.
+
+            <h3>Where can I find the source code of DarkJargon.net?</h3>
+    The code is available in our public github repository: <a href="https://github.com/dom-s/dark-jargon">https://github.com/dom-s/dark-jargon</a>.
+        </p>
+    <br><br><br>
+        <p class="text-start">
+            <h2>License</h2>
             Copyright 2021 Dominic Seyler (https://dominicseyler.com)
             <br>
             Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
