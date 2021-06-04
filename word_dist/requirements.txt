@@ -1,0 +1,6 @@
+scipy
+tqdm
+gensim
+smart_open
+numpy
+nltk
