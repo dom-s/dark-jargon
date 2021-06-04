@@ -14,9 +14,9 @@ After download:
 
 ## Run Experiment Scripts
 
-To reproduce the experiments for language model smoothing execute `bash word_dist/script/run_smoothing-clean_clean.sh`. These results were not included in the ECIR work but can be found in the Ph.D. thesis.
+To reproduce the experiments for language model smoothing execute `bash word_dist/script/run_smoothing-clean_clean.sh`, while in the project root directory. These results were not included in the ECIR work but can be found in the Ph.D. thesis.
 
-To reproduce the iterative results **TODO**
+To reproduce the iterative results execute `bash word_dist/script/run_iterative-clean_clean.sh`, while in the project root directory. These results were not included in the ECIR work but can be found in the Ph.D. thesis.
 
 
 ## Description of components
