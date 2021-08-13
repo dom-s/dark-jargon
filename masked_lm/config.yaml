@@ -1,0 +1,31 @@
+---
+##### DATA #####
+data:
+  db_dir: '' # directory that contains sqlite databases
+  db_names: [
+      'hackforums_preprocessed_vt.db',
+      'darkode_sqlite3_vt.db',
+      'silkroad_preprocessed_vt.db',
+      'nulled_preprocessed_vt.db'
+  ]
+  kl_div_files: [
+      'darkode-rank_laplace_1.0.csv',
+      'hackforums-rank_laplace_1.0.csv',
+      'nulled-rank_laplace_1.0.csv',
+      'silkroad-rank_laplace_1.0.csv'
+  ]
+  resource_dir: 'resource/'
+  dark_term_csv: 'dark-term-db.csv' # list of dark terms that will be masked
+
+
+##### MASK PREDICTIONS #####
+mask:
+  model_name: 'bert-base-uncased' # pre-trained model name from huggingface transformers: https://huggingface.co/models
+  output_dir: '' # output directory for predictions
+  window_size: 20 # window size of words around a masked dark term
+  top_k: 5 # number of top-k perdictions that will be used in the final count (ordered by frequency)
+
+
+##### EXTRACT TIMESTAMPS #####
+timestamps:
+  dict_out: 'dark-terms_timestamps.pkl'
